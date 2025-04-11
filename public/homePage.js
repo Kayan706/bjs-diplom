@@ -33,10 +33,17 @@ setInterval(table, 60000)
 
 let mon = new MoneyManager();
 
+function showMessage(res){
+    if (res.success){
+        ProfileWidget.showProfile(res.data);
+        mon.setMessage(true, String("Операция прошла успешно"));
+    } else {
+        mon.setMessage(false, String(res.error));
+    };
+};
 
 mon.addMoneyCallback = function (data){
     ApiConnector.addMoney(data, (res) => {
-        location.reload()
         showMessage(res);
 
     })
@@ -44,7 +51,6 @@ mon.addMoneyCallback = function (data){
 
 mon.conversionMoneyCallback =  function(data){
     ApiConnector.convertMoney(data, (res) => {
-        location.reload()
         showMessage(res);
 
     })
@@ -53,13 +59,13 @@ mon.conversionMoneyCallback =  function(data){
 
 mon.sendMoneyCallback = function(){
     ApiConnector.transferMoney(data, (res)=> {
-        location.reload()
         showMessage(res);
     })
 }
 
 
 let fov = new FavoritesWidget();
+
 
 function list(res){
     fov.clearTable();
@@ -80,7 +86,7 @@ fov.addUserCallback = function(data){
             list(res);
             fov.setMessage(true, String(`${data.name} успешно добавлен`));
         }else{
-            fov.setMessage(false, String(response.error));
+            fov.setMessage(false, String(res.error));
         }
         
     })
@@ -92,7 +98,7 @@ fov.removeUserCallback = function(data){
             list(res);
             fov.setMessage(true,String(`адрес с ID ${data} успешно удален`));
         }else{
-            fov.setMessage(false,String(response.error));
+            fov.setMessage(false,String(res.error));
         }
     })
 }

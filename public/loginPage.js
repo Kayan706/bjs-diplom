@@ -1,14 +1,13 @@
 "use strict"
-
-
 let user = new UserForm();
 
 user.loginFormCallback = function(data) {
     ApiConnector.login(data, (res) => {
-        if(res.success == true){
+        console.log(res.success)
+        if(res.success){
             location.reload()
         } else {
-            console.error(res.error)
+            user.setLoginErrorMessage(String(res.error));
         }
     })
 }
@@ -16,10 +15,10 @@ user.loginFormCallback = function(data) {
 user.registerFormCallback = function(data){
     ApiConnector.register(data, (res) => {
         console.log(res.success)
-        if(callback.success == false){
-            console.error(callback.error)
-        } else {
+        if(res.success){
             location.reload()
+        } else {
+            user.setRegisterErrorMessage(String(res.error));
         }
     })
 }
